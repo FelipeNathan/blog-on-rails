@@ -5,6 +5,10 @@ class Article < ApplicationRecord
   has_attached_file :image, styles: { medium: "300x300>", thumb: "100x100>" }
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png"]
 
+  validates :title, presence: true, uniqueness: { case_sensitive: false }
+  validates :body, presence: true
+  
+
 	def tag_list
     tags.join(", ")
   end

@@ -8,11 +8,13 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    @article.save
-
-    flash.notice = "Article '#{@article.title}' Created!"
-
-    redirect_to article_path(@article)
+    if @article.save
+      flash.notice = "Article '#{@article.title}' Created!"
+      redirect_to article_path(@article)
+    else
+      flash.notice = "Failed to create article '#{@article.title}'"
+      render :new
+    end
   end
 
   def new
@@ -27,11 +29,15 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @article.update(article_params)
     
-    flash.notice = "Article '#{@article.title}' Updated!"
+    if @article.update(article_params)
+      flash.notice = "Article '#{@article.title}' Updated!"
+      redirect_to article_path(@article)
+    else
+      flash.notice = "Failed to update article '#{@article.title}'"
+      render :edit
+    end
     
-    redirect_to article_path(@article)
   end
 
   def destroy
